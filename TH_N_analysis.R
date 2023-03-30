@@ -6,7 +6,7 @@ library(ggsignif)
 th_n <- readxl::read_excel("/Users/summerharper/NTRES 6100/gitHub/Oak_leaf_data/TH_N_data.xlsx")
 View(th_n)
 
-## Cleaning Data
+## Cleaning Data and column names
 colnames(th_n)
 th_n_clean <- clean_names(th_n) %>%
   rename(leaf_category = leaf_category_o_original_l_lammas) %>%
@@ -16,6 +16,7 @@ th_n_clean <- clean_names(th_n) %>%
 
 ### T-test
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean) # p = 0.0004217
+
 #difference between lammas and original in each age group
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean, subset = tree_age == "mature") #p = 0.5494
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean, subset = tree_age == "intermediate") # p = 1.025e-05
