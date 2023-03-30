@@ -12,11 +12,11 @@ th_n_clean <- clean_names(th_n) %>%
   rename(leaf_category = leaf_category_o_original_l_lammas) %>%
   select(sample_label,percent_n, leaf_category, tree_age)
 
+View(th_n_clean)
 
 
 ### T-test
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean) # p = 0.0004217
-
 #difference between lammas and original in each age group
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean, subset = tree_age == "mature") #p = 0.5494
 t.test(formula = percent_n ~ leaf_category, data = th_n_clean, subset = tree_age == "intermediate") # p = 1.025e-05
@@ -39,4 +39,16 @@ th_n_clean %>%
   facet_wrap(~tree_age) +
   ggtitle("N% in Different Leaf Types and Age Groups") +
     ggsignif::geom_signif(comparisons = list(c("L", "O")), test = "t.test")
+
+means_by_group <-th_n_clean %>%
+  group_by(tree_age, leaf_category) %>%
+  summarize(mean_N = mean(percent_n))
+
+means_by_group %>%
+  group_by(leaf_category) %>%
+  ggplot(mapping = aes(x = tree_age, y = mean_N, fill = leaf_category)) +
+  geom_col(position = position_dodge())
+
+
+
 
